@@ -159,7 +159,7 @@ function Register() {
     return (
         <>
             <Errform errs={errs} />
-            <div class="col-sm-4">
+            
 					<div class="signup-form">
 						<h2>New User Signup!</h2>
 						<form onSubmit={handleSubmit}>
@@ -172,7 +172,7 @@ function Register() {
 							<button type="submit" class="btn btn-default">Signup</button>
 						</form>
 					</div>
-				</div>
+				
         </>
     );
 };

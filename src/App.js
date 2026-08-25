@@ -1,20 +1,47 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import Blog from './Blog';
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Header from './component/layout/Header';
 import Footer from './component/layout/Footer';
 import MenuLeft from './component/layout/MenuLeft';
-import BlogDetail from './BlogDetail';
+
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    
+    if (token && userData) {
+      setIsLoggedIn(true);
+      setUserInfo(JSON.parse(userData));
+    }
+  }, []);
+
+  const handleLogin = (userData) => {
+    setIsLoggedIn(true);
+    setUserInfo(userData);
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    setIsLoggedIn(false);
+    setUserInfo(null);
+  };
+
   return (
     <div className="App">
-      <Header />
+      <Header 
+        isLoggedIn={isLoggedIn} 
+        userInfo={userInfo} 
+        onLogout={handleLogout} 
+      />
       <section>
         <div className="container">
-         <div className="row">
-          <MenuLeft />    
-          <Outlet />
+          <div className="row">
+            <MenuLeft />    
+            <Outlet context={{ handleLogin }} />
           </div>
         </div>
       </section>

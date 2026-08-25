@@ -1,6 +1,36 @@
-import React from 'react';
-import {Link} from 'react-router-dom'; 
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+
 function Header(){
+  const navigate = useNavigate();
+  function handleLogout(e) {
+    e.preventDefault();
+    localStorage.removeItem("ktraLog");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate('/Login-Register');
+  }
+  function renderLogin(){
+    var getlocal=localStorage.getItem("ktraLog");
+    const isLoggedIn = getlocal === "true" || getlocal === true || JSON.parse(getlocal) === true;
+    if (isLoggedIn) {
+      return (
+        <li>
+          <a href="#" onClick={handleLogout}>
+            <i className="fa fa-unlock" /> Logout
+          </a>
+        </li>
+      );
+    } else {
+      return (
+        <li>
+          <Link to="/Login-Register">
+            <i className="fa fa-lock" /> Login
+          </Link>
+        </li>
+      );
+  }
+}
     return(
         <header id="header">{/*header*/}  
   <div className="header_top">{/*header_top*/}
@@ -65,7 +95,7 @@ function Header(){
               <li><a href><i className="fa fa-star" /> Wishlist</a></li>
               <li><a href="checkout.html"><i className="fa fa-crosshairs" /> Checkout</a></li>
               <li><a href="cart.html"><i className="fa fa-shopping-cart" /> Cart</a></li>
-<Link to='/member/Register' ><li><a><i className="fa fa-lock" /> Login</a></li></Link>
+              {renderLogin()}
             </ul>
           </div>
         </div>  

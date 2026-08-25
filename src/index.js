@@ -6,8 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import BlogDetail from './BlogDetail';
 import Blog from './Blog';
-import Index from './member/Register';
-import Register from './member/Register';
+import UserIndex from './member/index';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
  <React.StrictMode>
@@ -17,7 +16,7 @@ root.render(
           <Route index element={<Blog />} />
           <Route path="blog" element={<Blog />} />
           <Route path="blog-detail/:id" element={<BlogDetail />} />
-          <Route path="/member/Register" element={<Register />} />
+          <Route path="Login-Register" element={<UserIndex />} />
         </Route>
       </Routes>
     </Router>
