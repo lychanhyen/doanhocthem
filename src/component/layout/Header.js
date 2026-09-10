@@ -12,7 +12,7 @@ function Header(){
   }
   function renderLogin(){
     var getlocal=localStorage.getItem("ktraLog");
-    const isLoggedIn = getlocal === "true" || getlocal === true || JSON.parse(getlocal) === true;
+    var isLoggedIn = getlocal === "true" || getlocal === true || JSON.parse(getlocal) === true;
     if (isLoggedIn) {
       return (
         <li>

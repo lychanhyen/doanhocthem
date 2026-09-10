@@ -13,7 +13,6 @@ function Login() {
   });
   
   const [errs, setErrs] = useState({});
-  const [loading, setLoading] = useState(false);
 
   function handleInputs(e) {
     const nameInput = e.target.name;
@@ -21,7 +20,7 @@ function Login() {
     setInputs(state => ({ ...state, [nameInput]: value }));
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
     let errSubmit = {};
     let flag = true;
@@ -44,60 +43,42 @@ function Login() {
 
     if (!flag) {
       setErrs(errSubmit);
-      return;
-    }
+    } else {
+      const data = {
+        email: inputs.email,
+        password: inputs.password,
+        level: 0
+      };
 
-    setErrs({});
-    setLoading(true);
+      axios.post('http://localhost/laravel8/public/api/login', data)
+        .then(response => {
+          if (response.data.errors) {
+            setErrs(response.data.errors);
+          } else {
+            console.log("Dữ liệu login API:", response.data);
 
-    try {
-      const res = await axios.post(
-        'http://localhost/laravel8/public/api/login',
-        {
-          email: inputs.email,
-          password: inputs.password
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            const userObj = response.data.auth || response.data.Auth || response.data.user;
+
+            if (response.data.token) {
+              localStorage.setItem('token', response.data.token);
+            }
+
+            if (userObj) {
+             
+              localStorage.setItem('auth', JSON.stringify(userObj));
+              
+              if (handleLogin) {
+                handleLogin(userObj);
+              }
+            }
+
+            localStorage.setItem("ktraLog", JSON.stringify(true));
+            navigate('/');
           }
-        }
-      );
-
-      console.log("res:", res.data);
-
-      if (res.data && res.data.token) {
-        localStorage.setItem('token', res.data.token);
-        let login=true;
-        localStorage.setItem("ktraLog",JSON.stringify(login));
-        if (res.data.auth) {
-          localStorage.setItem('user', JSON.stringify(res.data.auth));
-          handleLogin(res.data.auth);
-        }
-        
-        alert("Đăng nhập thành công!");
-        navigate('/');
-      } else {
-        alert("Đăng nhập thất bại!");
-      }
-
-    } catch (error) {
-      console.error('Lỗi:', error);
-      
-      if (error.response) {
-        if (error.response.status === 401) {
-          alert("Email hoặc mật khẩu không đúng!");
-        } else if (error.response.data && error.response.data.message) {
-          alert(error.response.data.message);
-        } else {
-          alert("Đăng nhập thất bại! Vui lòng thử lại.");
-        }
-      } else {
-        alert("Không thể kết nối đến server.");
-      }
-    } finally {
-      setLoading(false);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   }
 
@@ -113,8 +94,8 @@ function Login() {
             <input type="checkbox" className="checkbox"/> 
             Keep me signed in 
           </span>
-          <button type="submit" className="btn btn-default" disabled={loading}>
-            {loading ? "Đang xử lý..." : "Login"}
+          <button type="submit" className="btn btn-default">
+            Login
           </button>
         </form>
       </div>

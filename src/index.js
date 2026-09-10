@@ -4,8 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import BlogDetail from './BlogDetail';
-import Blog from './Blog';
+import BlogDetail from './blog/BlogDetail';
+import Blog from './blog/Blog';
 import UserIndex from './member/index';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

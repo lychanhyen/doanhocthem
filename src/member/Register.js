@@ -17,7 +17,6 @@ function Register() {
     const [avt, setavt] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState("");
     const [errs, setErrs] = useState({});
-    const [loading, setLoading] = useState(false);
 
     function handleInputs(e) {
         const nameInput = e.target.name;
@@ -26,28 +25,25 @@ function Register() {
     }
 
     function handleFile(e) {
-        const files = e.target.files[0];
-        setavt(files);
-        console.log(files);
-        if (files) {
+        const file = e.target.files[0];
+        setavt(file);
+        if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => {
+            reader.readAsDataURL(file);
+            reader.onload = () => {
                 setAvatarPreview(reader.result);
             };
-            reader.readAsDataURL(files);
         }
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         let errSubmit = {};
         let flag = true;
-
         if (inputs.name === "") {
             errSubmit.name = "Vui lòng nhập tên!";
             flag = false;
         }
-
         if (inputs.email === "") {
             errSubmit.email = "Vui lòng nhập email";
             flag = false;
@@ -58,7 +54,6 @@ function Register() {
                 flag = false;
             }
         }
-
         if (inputs.pass === "") {
             errSubmit.pass = "Vui lòng nhập mật khẩu";
             flag = false;
@@ -66,17 +61,14 @@ function Register() {
             errSubmit.pass = "Mật khẩu phải có ít nhất 6 ký tự";
             flag = false;
         }
-
         if (inputs.phone === "" || !inputs.phone.trim()) {
             errSubmit.phone = "Vui lòng nhập số điện thoại";
             flag = false;
         }
-
         if (inputs.address === "") {
             errSubmit.address = "Vui lòng nhập địa chỉ!";
             flag = false;
         }
-
         if (!avt) {
             errSubmit.avt = "Vui lòng chọn ảnh đại diện";
             flag = false;
@@ -93,88 +85,50 @@ function Register() {
                 flag = false;
             }
         }
-
         if (!flag) {
             setErrs(errSubmit);
-            return;
         } else {
-
-        setErrs({});
-        setLoading(true);
-
-        try {
-            const formData = new FormData();
-            formData.append('name', inputs.name);
-            formData.append('email', inputs.email);
-            formData.append('password', inputs.pass);
-            formData.append('phone', inputs.phone);
-            formData.append('address', inputs.address);
-            formData.append('level', 0);
-            formData.append('avatar', avt);
-
-            const res = await axios.post(
-                'http://localhost/laravel8/public/api/register',
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
+            const data = {
+                name: inputs.name,
+                email: inputs.email,
+                password: inputs.pass,
+                phone: inputs.phone,
+                address: inputs.address,
+                avatar: avatarPreview,
+                level: 0
+            };
+         axios.post('http://localhost/laravel8/public/api/register', data)
+             .then(response => {
+                 if (response.data.errors) {
+                      setErrs(response.data.errors);
+                 } else {
+                    alert("Đăng ký thành công!");
+                 }
+              })
+             .catch(error => {
+                 if (error.response && error.response.data && error.response.data.errors) {
+                      setErrs(error.response.data.errors);
                     }
-                }
-            );
-
-            console.log('Response từ server:', res.data);
-            alert('Đăng ký thành công!');
-            setInputs({
-                name: '',
-                email: '',
-                pass: '',
-                phone: '',
-                address: '',
-                level: 0,
-                avatar: ''
-            });
-            setavt(null);
-            setAvatarPreview("");
-        } catch (error) {
-            console.error('Lỗi:', error);
-            if (error.response && error.response.data.errors) {
-                const serverErrors = {};
-                const errors = error.response.data.errors;
-                if (errors.name) serverErrors.name = errors.name[0];
-                if (errors.email) serverErrors.email = errors.email[0];
-                if (errors.password) serverErrors.pass = errors.password[0];
-                if (errors.phone) serverErrors.phone = errors.phone[0];
-                if (errors.address) serverErrors.address = errors.address[0];
-                if (errors.avatar) serverErrors.avt = errors.avatar[0];
-                setErrs(serverErrors);
-            } else {
-                alert('Đăng ký thất bại! Vui lòng thử lại.');
-            }
-        } finally {
-            setLoading(false);
+                });
         }
     };
-    }
-
     return (
         <>
             <Errform errs={errs} />
-            
-					<div class="signup-form">
-						<h2>New User Signup!</h2>
-						<form onSubmit={handleSubmit}>
-							<input type="text" placeholder="Họ và tên" name="name" value={inputs.name} onChange={handleInputs}/>
-                            <input type="email" placeholder="Email Address" name="email" value={inputs.email} onChange={handleInputs} />
-                            <input type="password" placeholder="Mật khẩu" name="pass" value={inputs.pass} onChange={handleInputs}/>
-                            <input type="text" placeholder="Số điện thoại" name="phone" value={inputs.phone} onChange={handleInputs}/>
-                            <input type="text" placeholder="Địa chỉ" name="address" value={inputs.address} onChange={handleInputs}/>
-                            <input type="file" placeholder="Ảnh đại diện" name="avt" onChange={handleFile}/>
-							<button type="submit" class="btn btn-default">Signup</button>
-						</form>
-					</div>
-				
+            <div className="signup-form">
+                <h2>New User Signup!</h2>
+                <form onSubmit={handleSubmit}>
+                    <input type="text" placeholder="Họ và tên" name="name" value={inputs.name} onChange={handleInputs}/>
+                    <input type="email" placeholder="Email Address" name="email" value={inputs.email} onChange={handleInputs} />
+                    <input type="password" placeholder="Mật khẩu" name="pass" value={inputs.pass} onChange={handleInputs}/>
+                    <input type="text" placeholder="Số điện thoại" name="phone" value={inputs.phone} onChange={handleInputs}/>
+                    <input type="text" placeholder="Địa chỉ" name="address" value={inputs.address} onChange={handleInputs}/>
+                    <input type="file" placeholder="Ảnh đại diện" name="avt" onChange={handleFile}/>
+                    <button type="submit" className="btn btn-default">Signup</button>
+                </form>
+            </div>
         </>
     );
-};
+}
 
 export default Register;
