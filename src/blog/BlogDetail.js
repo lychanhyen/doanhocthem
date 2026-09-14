@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import Cmt from './cmt';
 import ListCmt from './ListCmt';
 import TestImage from './TestImage';
+import Rate from './rate';
 function BlogDetail() {
     let params = useParams();
     const [data, setData] = useState(null);    
@@ -74,25 +75,7 @@ function BlogDetail() {
                 </div>
             </div>
 
-            <div className="rating-area">
-                <ul className="ratings">
-                    <li className="rate-this">Rate this item:</li>
-                    <li>
-                        <i className="fa fa-star color" />
-                        <i className="fa fa-star color" />
-                        <i className="fa fa-star color" />
-                        <i className="fa fa-star" />
-                        <i className="fa fa-star" />
-                    </li>
-                    <li className="color">(6 votes)</li>
-                </ul>
-                <ul className="tag">
-                    <li>TAG:</li>
-                    <li><a className="color" href="#">Pink <span>/</span></a></li>
-                    <li><a className="color" href="#">T-Shirt <span>/</span></a></li>
-                    <li><a className="color" href="#">Girls</a></li>
-                </ul>
-            </div>
+           <Rate idBlog={params.id}/>
 
             <div className="socials-share">
                 <a href="#"><img src="images/blog/socials.png" alt="" /></a>
