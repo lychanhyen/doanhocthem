@@ -4,11 +4,12 @@ import { Outlet } from "react-router-dom";
 import Header from './component/layout/Header';
 import Footer from './component/layout/Footer';
 import MenuLeft from './component/layout/MenuLeft';
-
+import { useLocation } from "react-router-dom";
+import MenuAcc from './component/MenuAcc';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
-
+  const param1 = useLocation(); 
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
@@ -40,7 +41,7 @@ function App() {
       <section>
         <div className="container">
           <div className="row">
-            <MenuLeft />    
+            {param1['pathname'].includes("account") ?  <MenuAcc /> : <MenuLeft />}
             <Outlet context={{ handleLogin }} />
           </div>
         </div>

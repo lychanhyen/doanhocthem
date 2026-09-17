@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import BlogDetail from './blog/BlogDetail';
 import Blog from './blog/Blog';
 import UserIndex from './member/index';
+import Update from './member/Update';
+import AddProduct from './member/AddProduct';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
  <React.StrictMode>
@@ -17,6 +19,9 @@ root.render(
           <Route path="blog" element={<Blog />} />
           <Route path="blog-detail/:id" element={<BlogDetail />} />
           <Route path="Login-Register" element={<UserIndex />} />
+          <Route path="account" element={<Update />} />
+          <Route path="account/update" element={<Update />} />
+          <Route path="account/product" element={<AddProduct />} />
         </Route>
       </Routes>
     </Router>
