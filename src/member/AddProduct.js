@@ -29,7 +29,7 @@ function AddProduct(){
     },[])
     function handleInputs(e){
         const nameInput=e.target.name;
-        const value♣=e.target.value;
+        const value=e.target.value;
         setInputs(state =>({...state,[nameInput]:value}));
     }
     function handleFile(e){
