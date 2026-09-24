@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 function MyProduct(){
     const [products,setProducts]=useState(null);
     useEffect(()=>{
-        const userData = JSON.parse(localStorage.getItem("appState") || "{}");
+        const userData = JSON.parse(localStorage.getItem("auth") || "{}");
         const token = localStorage.getItem("token");
         const config = {
             headers: {
@@ -55,8 +55,8 @@ function MyProduct(){
                             <p>${item.price}</p>
                         </td>
                         <td className="cart_total">
-                            <a>edit</a>
-                            <a>delete</a>
+                            <Link to={`/account/edit/${item.id}`}>edit</Link>
+                            <Link to={`/account/edit/${item.id}`}>delete</Link>
                         </td>
                     </tr>
                 )

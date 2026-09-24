@@ -10,6 +10,7 @@ import UserIndex from './member/index';
 import Update from './member/Update';
 import AddProduct from './member/AddProduct';
 import MyProduct from './member/MyProduct';
+import EditProduct from './member/EditProduct';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
  <React.StrictMode>
@@ -24,6 +25,7 @@ root.render(
           <Route path="account/update" element={<Update />} />
           <Route path="account/addproduct" element={<AddProduct />} />
           <Route path="account/product" element={<MyProduct />} />
+          <Route path="account/edit/:id" element={<EditProduct />} />
         </Route>
       </Routes>
     </Router>
