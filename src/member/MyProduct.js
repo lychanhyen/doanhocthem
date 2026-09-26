@@ -30,6 +30,25 @@ function MyProduct(){
             return '';
         }
     };
+    function handleDelete(id){
+        const userData = JSON.parse(localStorage.getItem("auth") || "{}");
+        const token = localStorage.getItem("token");
+        const config = {
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+        axios.get(`http://localhost/laravel8/public/api/user/product/delete/${id}`, config)
+        .then(response => {
+            setProducts(response.data.data);
+            alert("xoa thanh cong");
+        })
+        .catch(error=>{
+            console.log(error);
+        })
+    }
     function renderItem(){
        if (products && Object.keys(products).length > 0) {
             const productList = Object.values(products).filter(item => item && typeof item === 'object' && item.id);
@@ -56,7 +75,7 @@ function MyProduct(){
                         </td>
                         <td className="cart_total">
                             <Link to={`/account/edit/${item.id}`}>edit</Link>
-                            <Link to={`/account/edit/${item.id}`}>delete</Link>
+                            <button type="button" onClick={() => handleDelete(item.id)}>x</button>
                         </td>
                     </tr>
                 )
