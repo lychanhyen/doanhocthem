@@ -116,7 +116,7 @@ function Header(){
           </div>
           <div className="mainmenu pull-left">
             <ul className="nav navbar-nav collapse navbar-collapse">
-              <li><a href="index.html">Home</a></li>
+              <li><Link to="/home">Home</Link></li>
               <li className="dropdown"><a href="#">Shop<i className="fa fa-angle-down" /></a>
                 <ul role="menu" className="sub-menu">
                   <li><a href="shop.html">Products</a></li>
@@ -126,7 +126,7 @@ function Header(){
                   <li><a href="login.html">Login</a></li> 
                 </ul>
               </li> 
-              <li className="dropdown"><a href="#" className="active">Blog<i className="fa fa-angle-down" /></a>
+              <li className="dropdown"><Link to="/blog">Blog</Link>
                 <ul role="menu" className="sub-menu">
                   <li><a href="blog.html" className="active">Blog List</a></li>
                   <li><a href="blog-single.html">Blog Single</a></li>

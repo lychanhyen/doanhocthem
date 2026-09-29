@@ -11,6 +11,7 @@ import Update from './member/Update';
 import AddProduct from './member/AddProduct';
 import MyProduct from './member/MyProduct';
 import EditProduct from './member/EditProduct';
+import Home from './Home';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
  <React.StrictMode>
@@ -18,6 +19,7 @@ root.render(
       <Routes>
         <Route path="/" element={<App />}>  
           <Route index element={<Blog />} />
+          <Route path="home" element={<Home />} />
           <Route path="blog" element={<Blog />} />
           <Route path="blog-detail/:id" element={<BlogDetail />} />
           <Route path="Login-Register" element={<UserIndex />} />
