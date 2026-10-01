@@ -25,7 +25,7 @@ function Home() {
   };
   function renderProduct() {
     if (!product || product.length === 0) {
-      return <p>Đang tải sản phẩm...</p>;
+      return <p>...</p>;
     }
     return product.map((item) => {
       const imageName = getFirstImage(item.image);
@@ -43,7 +43,7 @@ function Home() {
         <div className="choose">
           <ul className="nav nav-pills nav-justified">
             <li><a href="#"><i className="fa fa-plus-square" />Add to wishlist</a></li>
-            <li><Link to="/productdetail">More</Link> </li>
+            <li><Link to={`productdetail/${item.id}`}>More</Link> </li>
           </ul>
         </div>
       </div>

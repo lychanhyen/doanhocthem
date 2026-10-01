@@ -12,14 +12,16 @@ import AddProduct from './member/AddProduct';
 import MyProduct from './member/MyProduct';
 import EditProduct from './member/EditProduct';
 import Home from './Home';
+import ProductDetail from './ProductDetail';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
  <React.StrictMode>
     <Router>
       <Routes>
         <Route path="/" element={<App />}>  
-          <Route index element={<Blog />} />
+          <Route index element={<Home />} />
           <Route path="home" element={<Home />} />
+          <Route path="productdetail/:id" element={<ProductDetail />} />
           <Route path="blog" element={<Blog />} />
           <Route path="blog-detail/:id" element={<BlogDetail />} />
           <Route path="Login-Register" element={<UserIndex />} />
