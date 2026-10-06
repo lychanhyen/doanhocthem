@@ -23,6 +23,24 @@ function Home() {
       return typeof imageJson === 'string' ? imageJson : '';
     }
   };
+  const handleAddToCart = (item) => {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingItemIndex = cart.findIndex(cartItem => cartItem.id === item.id);
+    if (existingItemIndex !== -1) {
+      cart[existingItemIndex].quantity += 1;
+    } else {
+      cart.push({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: getFirstImage(item.image),
+        id_user: item.id_user,
+        quantity: 1
+      });
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(`Đã thêm "${item.name}" vào giỏ hàng!`);
+  };
   function renderProduct() {
     if (!product || product.length === 0) {
       return <p>...</p>;
@@ -37,7 +55,12 @@ function Home() {
             <img src={`http://localhost/laravel8/public/upload/product/${item.id_user}/${imageName}`} alt={item.name}/>
             <h2>{item.price}$</h2>
             <p>{item.name}</p>
-            <a href="#" className="btn btn-default add-to-cart"><i className="fa fa-shopping-cart" />Add to cart</a>
+            <button 
+  className="btn btn-default add-to-cart" 
+  onClick={() => handleAddToCart(item)}
+>
+  <i className="fa fa-shopping-cart" /> Add to cart
+</button>
           </div>
         </div>
         <div className="choose">

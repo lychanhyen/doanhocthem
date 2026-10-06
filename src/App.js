@@ -9,11 +9,12 @@ import MenuAcc from './component/MenuAcc';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+  const route = useLocation();
   const param1 = useLocation(); 
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
-    
+
     if (token && userData) {
       setIsLoggedIn(true);
       setUserInfo(JSON.parse(userData));
@@ -30,7 +31,9 @@ function App() {
     setIsLoggedIn(false);
     setUserInfo(null);
   };
-
+  const path = route.pathname;
+  const isAccountPage = path.includes("account");
+  const isCartPage = path.includes("cart");
   return (
     <div className="App">
       <Header 
@@ -41,7 +44,11 @@ function App() {
       <section>
         <div className="container">
           <div className="row">
-            {param1['pathname'].includes("account") ?  <MenuAcc /> : <MenuLeft />}
+            {isAccountPage ? (
+                <MenuAcc />
+            ) : (
+                !isCartPage && <MenuLeft />
+            )}
             <Outlet context={{ handleLogin }} />
           </div>
         </div>
