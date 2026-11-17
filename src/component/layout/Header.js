@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-
+import { CartContext } from '../../CartContext';
+import { WishlistContext } from '../../WishlistContext';
+import { useSelector } from "react-redux";
+import { selectTotalItems } from "../../redux/cartSlice";
 function Header(){
   const navigate = useNavigate();
+  const {toltalitem}=useContext(CartContext);
+  const { toltalitem: wishlistQty } = useContext(WishlistContext);
+  const totalItems = useSelector(selectTotalItems);
   function handleLogout(e) {
     e.preventDefault();
     localStorage.removeItem("ktraLog");
@@ -92,9 +98,9 @@ function Header(){
           <div className="shop-menu clearfix pull-right">
             <ul className="nav navbar-nav">
              <li><Link to="/account"><i className="fa fa-user" /> Account</Link></li>
-              <li><a href><i className="fa fa-star" /> Wishlist</a></li>
-              <li><a href="checkout.html"><i className="fa fa-crosshairs" /> Checkout</a></li>
-              <li><Link to="/cart"><i className="fa fa-shopping-cart" /> Cart</Link></li>
+              <li><Link to="/wishlist"><i className="fa fa-star" /> Wishlist({wishlistQty})</Link></li>
+              <li><Link to='/checkout'><i className="fa fa-crosshairs" /> Redux({totalItems})</Link></li>
+              <li><Link to="/cart"><i className="fa fa-shopping-cart" />Cart({toltalitem})</Link></li>
               {renderLogin()}
             </ul>
           </div>

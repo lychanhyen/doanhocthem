@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { CartContext } from "./CartContext";
 import axios from "axios";
+import { WishlistContext } from "./WishlistContext";
 function Home() {
   const [product, setProduct] = useState([]);
+  const { addToCart } = useContext(CartContext);
+  const { addToWishlist, isInWishlist } = useContext(WishlistContext);
   useEffect(() => {
     axios.get("http://localhost/laravel8/public/api/product")
       .then(res => {
@@ -24,21 +29,13 @@ function Home() {
     }
   };
   const handleAddToCart = (item) => {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existingItemIndex = cart.findIndex(cartItem => cartItem.id === item.id);
-    if (existingItemIndex !== -1) {
-      cart[existingItemIndex].quantity += 1;
-    } else {
-      cart.push({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        image: getFirstImage(item.image),
-        id_user: item.id_user,
-        quantity: 1
-      });
-    }
-    localStorage.setItem("cart", JSON.stringify(cart));
+    addToCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: getFirstImage(item.image),
+      id_user: item.id_user
+    }, 1);
     alert(`Đã thêm "${item.name}" vào giỏ hàng!`);
   };
   function renderProduct() {
@@ -64,10 +61,28 @@ function Home() {
           </div>
         </div>
         <div className="choose">
-          <ul className="nav nav-pills nav-justified">
-            <li><a href="#"><i className="fa fa-plus-square" />Add to wishlist</a></li>
-            <li><Link to={`productdetail/${item.id}`}>More</Link> </li>
-          </ul>
+         <div className="choose">
+  <ul className="nav nav-pills nav-justified">
+    <li>
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          if (isInWishlist(item.id)) {
+            alert(`"${item.name}" đã có trong wishlist!`);
+            return;
+          }
+          addToWishlist(item.id);
+          alert(`Đã thêm "${item.name}" vào wishlist!`);
+        }}
+      >
+        <i className="fa fa-plus-square" />
+        {isInWishlist(item.id) ? "Đã yêu thích" : "Add to wishlist"}
+      </a>
+    </li>
+    <li><Link to={`productdetail/${item.id}`}>More</Link></li>
+  </ul>
+</div>
         </div>
       </div>
     </div>

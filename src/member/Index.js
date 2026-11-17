@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
-
 function Index({ onLogin }){
     return(
         <>
@@ -22,5 +21,4 @@ function Index({ onLogin }){
         </>
     )
 }
-
 export default Index;

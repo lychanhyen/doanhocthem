@@ -14,27 +14,41 @@ import EditProduct from './member/EditProduct';
 import Home from './Home';
 import Cart from './Cart';
 import ProductDetail from './ProductDetail';
+import Wishlist from './Wishlist';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import { CartProvider } from './CartContext';
+import CartBridge from './redux/CartBridge';
+import Checkout from './Checkout';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
  <React.StrictMode>
-    <Router>
-      <Routes>
-        <Route path="/" element={<App />}>  
-          <Route index element={<Home />} />
-          <Route path="home" element={<Home />} />
-          <Route path="productdetail/:id" element={<ProductDetail />} />
-          <Route path="blog" element={<Blog />} />
-          <Route path="cart" element={<Cart />} />
-          <Route path="blog-detail/:id" element={<BlogDetail />} />
-          <Route path="Login-Register" element={<UserIndex />} />
-          <Route path="account" element={<Update />} />
-          <Route path="account/update" element={<Update />} />
-          <Route path="account/addproduct" element={<AddProduct />} />
-          <Route path="account/product" element={<MyProduct />} />
-          <Route path="account/edit/:id" element={<EditProduct />} />
-        </Route>
-      </Routes>
-    </Router>
+    <Provider store={store}>
+      <CartProvider>
+        <CartBridge>
+          <Router>
+            <Routes>
+              <Route path="/" element={<App />}>
+                <Route index element={<Home />} />
+                <Route path="home" element={<Home />} />
+                <Route path="productdetail/:id" element={<ProductDetail />} />
+                <Route path="blog" element={<Blog />} />
+                <Route path="wishlist" element={<Wishlist />} />
+                <Route path="cart" element={<Cart />} />
+                <Route path="checkout" element={<Checkout />} />
+                <Route path="blog-detail/:id" element={<BlogDetail />} />
+                <Route path="Login-Register" element={<UserIndex />} />
+                <Route path="account" element={<Update />} />
+                <Route path="account/update" element={<Update />} />
+                <Route path="account/addproduct" element={<AddProduct />} />
+                <Route path="account/product" element={<MyProduct />} />
+                <Route path="account/edit/:id" element={<EditProduct />} />
+              </Route>
+            </Routes>
+          </Router>
+        </CartBridge>
+      </CartProvider>
+    </Provider>
   </React.StrictMode>
 );
 

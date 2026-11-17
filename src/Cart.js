@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { CartContext } from './CartContext';
+import { useContext } from 'react';
 function Cart() {
-    const [cart, setCart] = useState([]);
-    useEffect(() => {
-        const data = JSON.parse(localStorage.getItem("cart") || "[]");
-        setCart(data);
-    }, []);
-    const syncCart = (newCart) => {
-        setCart(newCart);
-        localStorage.setItem("cart", JSON.stringify(newCart));
-    };
+    const { cart, updateQuantity, removeFromCart } = useContext(CartContext);
     const getFirstImage = (imageJson) => {
         if (!imageJson) return '';
         try {
@@ -20,30 +14,19 @@ function Cart() {
         }
     };
     function handleIncrease(id) {
-        const newCart = cart.map((item) =>
-            item.id.toString() === id.toString()
-                ? { ...item, quantity: (item.quantity || 1) + 1 }
-                : item
-        );
-        syncCart(newCart);
+    updateQuantity(id, 1);
     }
     function handleDecrease(id) {
-        const newCart = cart.map((item) => {
-            if (item.id.toString() === id.toString()) {
-                if (item.quantity <= 1) {
-                    alert("Số lượng không thể nhỏ hơn 1. Nếu muốn xóa, bấm nút X.");
-                    return item;
-                }
-                return { ...item, quantity: item.quantity - 1 };
-            }
-            return item;
-        });
-        syncCart(newCart);
+    const item = cart.find((i) => i.id.toString() === id.toString());
+    if (item && item.quantity <= 1) {
+        alert("Số lượng không thể nhỏ hơn 1. Nếu muốn xóa, bấm nút X.");
+        return;
+    }
+    updateQuantity(id, -1);
     }
     function handleDelete(id) {
-        if (!window.confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
-        const newCart = cart.filter((item) => item.id.toString() !== id.toString());
-        syncCart(newCart);
+    if (!window.confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
+    removeFromCart(id);
     }
     function tinhTotal() {
         let total = 0;

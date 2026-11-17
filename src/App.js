@@ -6,26 +6,23 @@ import Footer from './component/layout/Footer';
 import MenuLeft from './component/layout/MenuLeft';
 import { useLocation } from "react-router-dom";
 import MenuAcc from './component/MenuAcc';
+import { WishlistProvider } from './WishlistContext';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const route = useLocation();
-  const param1 = useLocation(); 
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
-
     if (token && userData) {
       setIsLoggedIn(true);
       setUserInfo(JSON.parse(userData));
     }
   }, []);
-
   const handleLogin = (userData) => {
     setIsLoggedIn(true);
     setUserInfo(userData);
   };
-
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
@@ -33,29 +30,30 @@ function App() {
   };
   const path = route.pathname;
   const isAccountPage = path.includes("account");
-  const isCartPage = path.includes("cart");
+  const isCartPage = path.includes("cart") || path.includes("checkout");
   return (
-    <div className="App">
-      <Header 
-        isLoggedIn={isLoggedIn} 
-        userInfo={userInfo} 
-        onLogout={handleLogout} 
-      />
-      <section>
-        <div className="container">
-          <div className="row">
-            {isAccountPage ? (
+    <WishlistProvider>
+      <div className="App">
+        <Header
+          isLoggedIn={isLoggedIn}
+          userInfo={userInfo}
+          onLogout={handleLogout}
+        />
+        <section>
+          <div className="container">
+            <div className="row">
+              {isAccountPage ? (
                 <MenuAcc />
-            ) : (
+              ) : (
                 !isCartPage && <MenuLeft />
-            )}
-            <Outlet context={{ handleLogin }} />
+              )}
+              <Outlet context={{ handleLogin }} />
+            </div>
           </div>
-        </div>
-      </section>
-      <Footer />
-    </div>
+        </section>
+        <Footer />
+      </div>
+    </WishlistProvider>
   );
 }
-
 export default App;
